@@ -100,7 +100,6 @@ class MainPageComponent extends Component {
   	};
 
     return (
-      //style={{width: 800, height: 500}}
         <div id="map" style={styles}></div>
       
     )
