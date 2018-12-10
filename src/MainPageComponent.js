@@ -4,11 +4,10 @@ import FilterAreaComponent from './FilterAreaComponent';
 class MainPageComponent extends Component {
 
   state = {
-
     info : ''
   }
 
-   getGoogleMaps() {
+  getGoogleMaps() {
 
   	/* global google */
     // If we haven't already defined the promise, define it
@@ -18,7 +17,6 @@ class MainPageComponent extends Component {
         window.resolveGoogleMapsPromise = () => {
           // Resolve the promise
           resolve(google);
-
           // Tidy up
           delete window.resolveGoogleMapsPromise;
         };
@@ -44,38 +42,23 @@ class MainPageComponent extends Component {
   componentDidMount() {
       // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
-// console.log(this)
       this.createMarkers();
     });
   }
 
-  
   createMarkers = (loc) => {
 
-    var markers = [];    
-    // let animae ='';
-
-
-      
-    // const locations = loc || this.props.locations;
+    var markers = [];
     const locations = this.props.locations;
-
-   
-    // console.log(this);
-
     const map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10
           });
-// console.log(locations.length);
 
-
-
-        for (var i = 0; i < locations.length; i++) {
+    for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
           var position = locations[i].point;
           var title = locations[i].title;
 
-          // console.log(locations.length);
           // Create a marker per location, and put into markers array.
           var marker = new google.maps.Marker({
             position: position,
@@ -84,31 +67,33 @@ class MainPageComponent extends Component {
           });   
 
           // Push the marker to our array of markers.
-          markers.push(marker);
-          
-          
+          markers.push(marker);    
       } 
 
       markers.map(m => {
-        if(loc){
-          if(loc.title === m.title){
-              console.log("true")
-            m.setAnimation (google.maps.Animation.BOUNCE);
+          if(loc){
+              if(loc.title === m.title) {
+                m.setAnimation (google.maps.Animation.BOUNCE);
+                let tempinfo = new google.maps.InfoWindow()
+                tempinfo.marker = m;
+                tempinfo.setContent('<strong>' + m.title + '</strong>');
+                tempinfo.open(map, m);
+              }
+           }
+
+          else {
+          m.setAnimation ( google.maps.Animation.DROP );
           }
-         }
-     else{
-        console.log("false")
-        m.setAnimation ( google.maps.Animation.DROP );
-     }
+
+          return '';
       })
+
       this.showListings(markers, map);
-    }
+  }
 
   showListings(markers, map) {
         var bounds = new google.maps.LatLngBounds();
         var currthis = this;
-
-        
 
         // Extend the boundaries of the map for each marker and display the marker
         for (var i = 0; i < markers.length; i++) {
@@ -118,160 +103,83 @@ class MainPageComponent extends Component {
         }
         map.fitBounds(bounds);
 
+        markers.forEach(marker =>marker.addListener('click', function(){            
+                  openModal(marker.title);
+                  setTimeout(function() {
+                    populateInfoWindow(marker, new google.maps.InfoWindow(), currthis.state.info)
+                    },500);
+        }));
 
-          markers.forEach(marker =>marker.addListener('click', function(){
-            
-            openModal(marker.title);
-             // console.log("returned");
-             setTimeout(function() {
-              populateInfoWindow(marker, new google.maps.InfoWindow(), currthis.state.info)
-           },500);
+        function populateInfoWindow(marker, infwindow, info) {  
 
-             
-          }));
+              if(infwindow.marker !== marker) {
+                  infwindow.marker = marker;
+                  infwindow.setContent('<strong>' + marker.title + '</strong>' 
+                    + '<div><strong>' + marker.position + '</strong></div>'
+                    +  '<strong>' + info + '</strong>'  );
+                  infwindow.open(map, marker);
 
-  function populateInfoWindow(marker, infwindow, info) {
-  console.log("populating infwindow for location" + marker.title);
+                  infwindow.addListener('closeclick', function(event){
+                      infwindow.close(map, marker);
+                    })
+              }
+        }
 
+        function openModal (title) {
 
-
-          if(infwindow.marker !== marker) {
-            infwindow.marker = marker;
-            // console.log("--------" + info);
-            infwindow.setContent('<strong>' + marker.title + '</strong>' 
-              + '<div><strong>' + marker.position + '</strong></div>'
-              +  '<strong>' + info + '</strong>'  );
-            // infwindow.setContent();
-            infwindow.open(map, marker);
-
-        infwindow.addListener('closeclick', function(event){
-            console.log("adding listsner for " + marker.title);
-              infwindow.close(map, marker);
-
+              const link = `https://en.wikipedia.org/w/api.php?format=json&exsentences=2&origin=*&action=query&prop=extracts&redirects=1&titles=${title}`;
+              fetch(link).then((response) => {
+                if(!response.error){
+                    response.json().then(res => {
+                          let pageid = Object.keys(res.query.pages);
+                          let info = res.query.pages[pageid[0]].extract;
+                          currthis.setState({info: info});
+                          return '';
+                    })
+                }
               })
-          }
-
-      }
-
-  function openModal (title) {
-
-      // console.log("In open modal for location: " + title);
-
-    // const link = `https://en.wikipedia.org/w/api.php?action=opensearch&mode=no-cors&format=json&search=${location.title}`;
-    // link.mode='no-cors';
-    const link = `https://en.wikipedia.org/w/api.php?format=json&exsentences=2&origin=*&action=query&prop=extracts&redirects=1&titles=${title}`
-    // console.log("Fetching data at link: " + link);
-    // link.setRequestHeader("Origin", "http://localhost:3000/");
-    fetch(link).then((response) => {
-      if(!response.error){
-          response.json().then(res => {
-            
-                let pageid = Object.keys(res.query.pages);
-          
-      let info = res.query.pages[pageid[0]].extract
-      // console.log(new DOMParser().parseFromString(info, "text"));
-    // let win = window.open();
-    // win.document.body.innerHTML = info;
-    // return "100";
-    // console.log("this here is = " + currthis);
-    currthis.setState({info: info});
-    // console.log("state of info: " + currthis.state.info)
-   
- // console.log("returning");
-    return '';
-
-      })
-    }
-
-  })
+        }
   }
-    }
-
-
-//   openModal = (location) => {
-
-//     // const link = `https://en.wikipedia.org/w/api.php?action=opensearch&mode=no-cors&format=json&search=${location.title}`;
-//     // link.mode='no-cors';
-// const link = `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&redirects=1&titles=${location.title}`
-//     // console.log("Fetching data at link: " + link);
-//     fetch(link).then((response) => {
-//       if(!response.error){
-//           response.json().then(res => {
-            
-//                 let pageid = Object.keys(res.query.pages);
-          
-//       let info = res.query.pages[pageid[0]].extract
-//       console.log(info);
-//           // })
-//       })
-//     }
-
-//   })
-//   }
-
-
- 
 
 
  render = () => {
 
   const filterLoc = this.props.filterLoc;
   const locations = this.props.locations;
-  // const showOnlyMarkers = this.props.showOnlyMarkers;
 
-  	const styles = {
-  		 width: '65%',
-    	height: window.innerHeight,
-      // height:'100%',
-    	float: 'right'
-  	};
-  	const fills = {
-  		width: '35%',
-    	height: window.innerHeight,
-      // maxHeight:'100%',
-    	background:'#002',
-      padding:'2%'
-  	};
+	const styles = {
+		width: '65%',
+  	height: window.innerHeight,
+  	float: 'right'
+	};
 
-    const contains = {
-        display:'flex'
-    }
+	const fills = {
+		width: '35%',
+  	height: window.innerHeight,
+  	background:'#002',
+    padding:'2%'
+	};
 
-    // const modal = {
-    // position: 'fixed',
-    // fontFamily: 'Arial, Helvetica, sans-serif',
-    // top: '0',
-    // left: '0'
-    // background: 'rgba(0, 0, 0, 0.8)',
-    // height: '50%';
-    // width: '100%';
-    // }
+  const contains = {
+    display:'flex'
+  };
 
-    return (
-
-    	<div className="container" style={contains}>
-	    	 <div id="filter" style={fills}>
-          {
-            <FilterAreaComponent 
-            locations= {locations} 
-            key={locations.id}
-            filterLoc = {filterLoc}
-            showOnlyMarkers={this.createMarkers}
-            // openModal={this.openModal }
-            />
-          }
-            
-         </div>
-	        <div id="map" style={styles}></div>
-          
-         
-          
-        </div>
-    
-      
-    )
+  return (
+          	<div className="container" style={contains}>
+      	    	  <div id="filter" style={fills}>
+                  {
+                    <FilterAreaComponent 
+                    locations= {locations} 
+                    key={locations.id}
+                    filterLoc = {filterLoc}
+                    showOnlyMarkers={this.createMarkers}
+                    />
+                  }    
+                </div>
+      	        <div id="map" style={styles}></div>
+            </div>  
+          )
   }
 }  
-
 
 export default MainPageComponent
