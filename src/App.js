@@ -38,7 +38,7 @@ class App extends Component {
 // defining routes '/' to main page and '/search' to search page
   render() {
     return  (
-       <div className="App">
+       <div className="App" tabIndex="1" aria-label="Neighbourhood Map application">
           <Route exact path="/" render={() => (
               <MainPageComponent 
                   locations={this.state.locations} 

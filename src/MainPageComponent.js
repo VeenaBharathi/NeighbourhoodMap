@@ -148,16 +148,15 @@ class MainPageComponent extends Component {
   const locations = this.props.locations;
 
 	const styles = {
-		width: '65%',
-  	height: window.innerHeight,
+		width: '70%',
   	float: 'right'
 	};
 
 	const fills = {
-		width: '35%',
+		width: '30%',
   	height: window.innerHeight,
   	background:'#002',
-    padding:'2%'
+    paddingLeft:'2%'
 	};
 
   const contains = {
@@ -166,7 +165,7 @@ class MainPageComponent extends Component {
 
   return (
           	<div className="container" style={contains}>
-      	    	  <div id="filter" style={fills}>
+      	    	  <div id="filter" tabIndex="1" aria-label = "filterArea for locations" style={fills}>
                   {
                     <FilterAreaComponent 
                     locations= {locations} 
@@ -176,7 +175,7 @@ class MainPageComponent extends Component {
                     />
                   }    
                 </div>
-      	        <div id="map" style={styles}></div>
+      	        <div id="map" tabIndex="0" role= "application" aria-label = "map with result locations" style={styles}></div>
             </div>  
           )
   }
