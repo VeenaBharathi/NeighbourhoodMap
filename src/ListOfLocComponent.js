@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class ListOfLocComponent extends Component {
 
 	render(){
-	     const locations = this.props.locations;
+	     const location = this.props.loc;
 
 	     const lists = {
 	     	color:'white', 
@@ -11,9 +11,9 @@ class ListOfLocComponent extends Component {
 	     }
 
 	     return(
-			locations.map(loc => {
-				return <li style={lists}>{loc.title}</li>
-			})
+			
+				<li style={lists}>{location.title}</li>
+			
 	     )
 	}
 }

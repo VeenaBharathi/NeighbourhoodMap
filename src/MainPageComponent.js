@@ -40,17 +40,15 @@ class MainPageComponent extends Component {
 
   	var markers = [];
     const locations = this.props.locations;
-    
+
     // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
 
     	const map = new google.maps.Map(document.getElementById('map'), {
-					zoom: 10,
-					center: {lat: 20.5937, lng: 78.9629}
+					zoom: 10
 					});
 
 	 	var marker1 = new google.maps.Marker({
-            position: {lat: 20.5937, lng: 78.9629},
             map: map })
 	 	console.log(marker1.map)
 
@@ -69,8 +67,12 @@ class MainPageComponent extends Component {
           });
           // Push the marker to our array of markers.
           markers.push(marker);
-          console.log(marker.map);
+          
           showListings();
+
+          marker.addListener('click', function(){
+            populateInfoWindow(this, new google.maps.InfoWindow())
+          })
       }  
 
       function showListings() {
@@ -81,6 +83,19 @@ class MainPageComponent extends Component {
           bounds.extend(markers[i].position);
         }
         map.fitBounds(bounds);
+      }
+
+      function populateInfoWindow(marker, infwindow) {
+          if(infwindow.marker != marker) {
+            infwindow.marker = marker;
+            infwindow.setContent('<div>' + marker.title + '</div>');
+            infwindow.open(map, marker);
+
+            infwindow.addListener('closeclick', function(){
+              infwindow.close(map, marker);
+            })
+          }
+
       }
 
     });
@@ -109,7 +124,9 @@ class MainPageComponent extends Component {
     	<div className="container" style={contains}>
 	    	 <div id="filter" style={fills}>
           {
-            <FilterAreaComponent locations= {this.props.locations}/>
+            <FilterAreaComponent 
+            locations= {this.props.locations} 
+            key={this.props.locations.id}/>
           }
             
          </div>

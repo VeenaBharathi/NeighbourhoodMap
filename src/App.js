@@ -11,11 +11,11 @@ class App extends Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     locations:[
-      {title: "Hyderabad" , point: {lat: 17.3850, lng: 78.4867}},
-      {title: "Jammu" , point: {lat: 32.7266, lng: 74.8570}},
-      {title: "Kolkata" , point: {lat: 22.5726, lng: 88.3639}},
-      {title: "Mumbai" , point: {lat: 19.0760, lng: 72.8777}},
-      {title: "Jharkhand" , point: {lat: 23.6102, lng: 85.2799}}
+      {id:'1', title: "Hyderabad" , point: {lat: 17.3850, lng: 78.4867}},
+      {id:'2', title: "Jammu" , point: {lat: 32.7266, lng: 74.8570}},
+      {id:'3', title: "Kolkata" , point: {lat: 22.5726, lng: 88.3639}},
+      {id:'4', title: "Mumbai" , point: {lat: 19.0760, lng: 72.8777}},
+      {id:'5', title: "Jharkhand" , point: {lat: 23.6102, lng: 85.2799}}
       ]
   }
 

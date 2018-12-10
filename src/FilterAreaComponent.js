@@ -7,19 +7,22 @@ class FilterAreaComponent extends Component {
      const locations = this.props.locations;
 
 			return (
-
 			<div>
-				<h2 style={{color: 'white'}}> Locations </h2>
+				<h1 style={{color: 'white'}}> Locations </h1>
 
-	            <div style={{display:'flex'}}>
-	                <span><input type='text' placeholder="Search by location"/></span>
+	            <div style={{display:'flex', textAlign: 'center'}}>
+	                <span><input type='text' placeholder=".. type to search"	/></span>
 	                <span><button>Filter</button></span>
 	            </div>
 
 	            <ul style={{listStyleType:'none', paddingInlineStart:'0'}}>
 	            {
-					<ListOfLocComponent locations={locations}/>
-						
+					locations.map(loc => {
+						return (<ListOfLocComponent 
+							loc={loc} 
+							key={loc.id}
+						/>)
+					})		
 	            }
 	            		            			
 	            </ul>
