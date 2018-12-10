@@ -37,22 +37,24 @@ class MainPageComponent extends Component {
   }
 
   componentDidMount() {
-
-  	var markers = [];
-    const locations = this.props.locations;
-
-    // Once the Google Maps API has finished loading, initialize the map
+      // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
 
-    	const map = new google.maps.Map(document.getElementById('map'), {
-					zoom: 10
-					});
+      this.createMarkers();
+    });
+  }
 
-	 	var marker1 = new google.maps.Marker({
-            map: map })
-	 	console.log(marker1.map)
+  
+  createMarkers = () => {
 
-    
+    var markers = [];
+
+    const locations = this.props.locations;
+    console.log(locations);
+
+    const map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10
+          });
 
         for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
@@ -68,14 +70,15 @@ class MainPageComponent extends Component {
           // Push the marker to our array of markers.
           markers.push(marker);
           
-          showListings();
+          this.showListings(markers, map);
 
-          marker.addListener('click', function(){
-            populateInfoWindow(this, new google.maps.InfoWindow())
-          })
-      }  
+          // marker.addListener('click', function(){
+          //   this.populateInfoWindow(this, new google.maps.InfoWindow(), map)
+          // }.call(this))
+      } 
+    }
 
-      function showListings() {
+  showListings(markers, map) {
         var bounds = new google.maps.LatLngBounds();
         // Extend the boundaries of the map for each marker and display the marker
         for (var i = 0; i < markers.length; i++) {
@@ -85,8 +88,8 @@ class MainPageComponent extends Component {
         map.fitBounds(bounds);
       }
 
-      function populateInfoWindow(marker, infwindow) {
-          if(infwindow.marker != marker) {
+  populateInfoWindow(marker, infwindow, map) {
+          if(infwindow.marker !== marker) {
             infwindow.marker = marker;
             infwindow.setContent('<div>' + marker.title + '</div>');
             infwindow.open(map, marker);
@@ -98,13 +101,11 @@ class MainPageComponent extends Component {
 
       }
 
-    });
-  }
-
   render = () => {
 
   const filterLoc = this.props.filterLoc;
   const locations = this.props.locations;
+  // const showOnlyMarkers = this.props.showOnlyMarkers;
 
   	const styles = {
   		 width: '65%',
@@ -130,7 +131,8 @@ class MainPageComponent extends Component {
             <FilterAreaComponent 
             locations= {locations} 
             key={locations.id}
-            filterLoc = {filterLoc}/>
+            filterLoc = {filterLoc}
+            showOnlyMarkers={this.createMarkers}/>
           }
             
          </div>

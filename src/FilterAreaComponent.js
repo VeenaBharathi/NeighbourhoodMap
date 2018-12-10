@@ -6,6 +6,7 @@ class FilterAreaComponent extends Component {
 	render(){
      const locations = this.props.locations;
      const filterLoc = this.props.filterLoc;
+     const showOnlyMarkers = this.props.showOnlyMarkers;
 
 			return (
 			<div>
@@ -17,8 +18,7 @@ class FilterAreaComponent extends Component {
 		                onChange={(event) => { filterLoc(locations, event.target.value.trim()) }}
 	                     />
                      </span>
-	                <span><button onClick={(event) => {
-	                	       const enteredVal = document.getElementById('userValue').value;}}>
+	                <span><button onClick={(event) => {showOnlyMarkers()}}>
 	                     	Filter</button></span>
 	            </div>
 
@@ -28,6 +28,7 @@ class FilterAreaComponent extends Component {
 						return (<ListOfLocComponent 
 							loc={loc} 
 							key={loc.id}
+							showOnlyMarkers={showOnlyMarkers}
 						/>)
 					})		
 	            }

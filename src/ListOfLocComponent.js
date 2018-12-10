@@ -4,6 +4,7 @@ class ListOfLocComponent extends Component {
 
 	render(){
 	     const location = this.props.loc;
+	     const showOnlyMarkers = this.props.showOnlyMarkers;
 
 	     const lists = {
 	     	color:'white', 
@@ -12,7 +13,7 @@ class ListOfLocComponent extends Component {
 
 	     return(
 			
-				<li style={lists}>{location.title}</li>
+				<li style={lists} >{location.title}</li>
 			
 	     )
 	}

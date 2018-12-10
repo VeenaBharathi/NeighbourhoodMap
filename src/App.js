@@ -29,8 +29,8 @@ class App extends Component {
       {id:'4', title: "Mumbai" , point: {lat: 19.0760, lng: 72.8777}},
       {id:'5', title: "Jharkhand" , point: {lat: 23.6102, lng: 85.2799}}
       ];
-    console.log(allLoc);
-    var filteredLoc = allLoc.filter(loc => {return loc.title.includes(val)});
+    // console.log(allLoc);
+    var filteredLoc = allLoc.filter(loc => {return loc.title.toLowerCase().includes(val.toLowerCase())});
     console.log(val);
     this.setState({locations: filteredLoc});
   }
@@ -39,7 +39,7 @@ class App extends Component {
 // defining routes '/' to main page and '/search' to search page
   render() {
 
-  	console.log("in app.js - " + this.state.locations)
+  	// console.log("in app.js - " + this.state.locations)
     return  (
        <div className="App">
           <Route exact path="/" render={() => (
