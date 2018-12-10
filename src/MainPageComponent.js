@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import FilterAreaComponent from './FilterAreaComponent';
 
 class MainPageComponent extends Component {
@@ -50,18 +51,18 @@ class MainPageComponent extends Component {
     var markers = [];    
     const locations = loc || this.props.locations;
     
-    console.log(locations);
+    // console.log(locations);
 
     const map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10
           });
-console.log(locations.length);
+// console.log(locations.length);
         for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
           var position = locations[i].point;
           var title = locations[i].title;
 
-          console.log(locations.length);
+          // console.log(locations.length);
           // Create a marker per location, and put into markers array.
           var marker = new google.maps.Marker({
             position: position,
@@ -71,10 +72,6 @@ console.log(locations.length);
           markers.push(marker);
           
           this.showListings(markers, map);
-
-          // marker.addListener('click', function(){
-          //   this.populateInfoWindow(this, new google.maps.InfoWindow(), map)
-          // }.call(this))
       } 
     }
 
@@ -86,12 +83,16 @@ console.log(locations.length);
           bounds.extend(markers[i].position);
         }
         map.fitBounds(bounds);
-      }
 
-  populateInfoWindow(marker, infwindow, map) {
+          markers.forEach(marker => marker.addListener('click', function(){
+            populateInfoWindow(this, new google.maps.InfoWindow())
+            openModal(this.title)
+          }));
+
+  function populateInfoWindow(marker, infwindow) {
           if(infwindow.marker !== marker) {
             infwindow.marker = marker;
-            infwindow.setContent('<div>' + marker.title + '</div>');
+            infwindow.setContent('<strong>' + marker.title + '</strong>' + '<div><strong>' + marker.position + '</strong></div>' );
             infwindow.open(map, marker);
 
             infwindow.addListener('closeclick', function(){
@@ -101,7 +102,57 @@ console.log(locations.length);
 
       }
 
-  render = () => {
+  function openModal (title) {
+
+      console.log("In open modal for location: " + title);
+
+    // const link = `https://en.wikipedia.org/w/api.php?action=opensearch&mode=no-cors&format=json&search=${location.title}`;
+    // link.mode='no-cors';
+    const link = `https://en.wikipedia.org/w/api.php?format=json&exsentences=2&origin=*&action=query&prop=extracts&redirects=1&titles=${title}`
+    // console.log("Fetching data at link: " + link);
+    // link.setRequestHeader("Origin", "http://localhost:3000/");
+    fetch(link).then((response) => {
+      if(!response.error){
+          response.json().then(res => {
+            
+                let pageid = Object.keys(res.query.pages);
+          
+      let info = res.query.pages[pageid[0]].extract
+      // console.log(new DOMParser().parseFromString(info, "text"));
+    let win = window.open();
+    win.document.body.innerHTML = info;
+
+
+      })
+    }
+
+  })
+  }
+    }
+
+
+//   openModal = (location) => {
+
+//     // const link = `https://en.wikipedia.org/w/api.php?action=opensearch&mode=no-cors&format=json&search=${location.title}`;
+//     // link.mode='no-cors';
+// const link = `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&redirects=1&titles=${location.title}`
+//     // console.log("Fetching data at link: " + link);
+//     fetch(link).then((response) => {
+//       if(!response.error){
+//           response.json().then(res => {
+            
+//                 let pageid = Object.keys(res.query.pages);
+          
+//       let info = res.query.pages[pageid[0]].extract
+//       console.log(info);
+//           // })
+//       })
+//     }
+
+//   })
+//   }
+
+ render = () => {
 
   const filterLoc = this.props.filterLoc;
   const locations = this.props.locations;
@@ -110,11 +161,13 @@ console.log(locations.length);
   	const styles = {
   		 width: '65%',
     	height: window.innerHeight,
+      // height:'100%',
     	float: 'right'
   	};
   	const fills = {
   		width: '35%',
     	height: window.innerHeight,
+      // maxHeight:'100%',
     	background:'#002',
       padding:'2%'
   	};
@@ -122,6 +175,16 @@ console.log(locations.length);
     const contains = {
         display:'flex'
     }
+
+    // const modal = {
+    // position: 'fixed',
+    // fontFamily: 'Arial, Helvetica, sans-serif',
+    // top: '0',
+    // left: '0'
+    // background: 'rgba(0, 0, 0, 0.8)',
+    // height: '50%';
+    // width: '100%';
+    // }
 
     return (
 
@@ -132,12 +195,16 @@ console.log(locations.length);
             locations= {locations} 
             key={locations.id}
             filterLoc = {filterLoc}
-            showOnlyMarkers={this.createMarkers}/>
+            showOnlyMarkers={this.createMarkers}
+            // openModal={this.openModal }
+            />
           }
             
          </div>
 	        <div id="map" style={styles}></div>
-          }
+          
+          />
+          
         </div>
     
       

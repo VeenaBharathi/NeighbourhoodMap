@@ -7,7 +7,7 @@ class FilterAreaComponent extends Component {
      const locations = this.props.locations;
      const filterLoc = this.props.filterLoc;
      const showOnlyMarkers = this.props.showOnlyMarkers;
-
+     // const openModal = this.prop.openModal;
 			return (
 			<div>
 				<h1 style={{color: 'white'}}> Locations </h1>
@@ -29,6 +29,7 @@ class FilterAreaComponent extends Component {
 							loc={loc} 
 							key={loc.id}
 							showOnlyMarkers={showOnlyMarkers}
+							// openModal = {openModal}
 						/>)
 					})		
 	            }
