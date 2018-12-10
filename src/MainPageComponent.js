@@ -103,6 +103,9 @@ class MainPageComponent extends Component {
 
   render = () => {
 
+  const filterLoc = this.props.filterLoc;
+  const locations = this.props.locations;
+
   	const styles = {
   		 width: '65%',
     	height: window.innerHeight,
@@ -125,8 +128,9 @@ class MainPageComponent extends Component {
 	    	 <div id="filter" style={fills}>
           {
             <FilterAreaComponent 
-            locations= {this.props.locations} 
-            key={this.props.locations.id}/>
+            locations= {locations} 
+            key={locations.id}
+            filterLoc = {filterLoc}/>
           }
             
          </div>

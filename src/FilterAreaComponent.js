@@ -5,14 +5,21 @@ class FilterAreaComponent extends Component {
 
 	render(){
      const locations = this.props.locations;
+     const filterLoc = this.props.filterLoc;
 
 			return (
 			<div>
 				<h1 style={{color: 'white'}}> Locations </h1>
 
 	            <div style={{display:'flex', textAlign: 'center'}}>
-	                <span><input type='text' placeholder=".. type to search"	/></span>
-	                <span><button>Filter</button></span>
+	                <span>
+		                <input id="userValue" type='text' placeholder=".. type to search" 
+		                onChange={(event) => { filterLoc(locations, event.target.value.trim()) }}
+	                     />
+                     </span>
+	                <span><button onClick={(event) => {
+	                	       const enteredVal = document.getElementById('userValue').value;}}>
+	                     	Filter</button></span>
 	            </div>
 
 	            <ul style={{listStyleType:'none', paddingInlineStart:'0'}}>

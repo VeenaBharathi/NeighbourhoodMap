@@ -20,21 +20,21 @@ class App extends Component {
   }
 
 
-  // componentDidMount() {
+  filterLoc = (locations, val) => {
 
-  // 	var places: [
-  //     {title: "Hyderabad" , point: {lat: 17.3850, lng: 78.4867}},
-  //     {title: "Jammu" , point: {lat: 32.7266, lng: 74.8570}},
-  //     {title: "Kolkata" , point: {lat: 22.5726, lng: 88.3639}},
-  //     {title: "Mumbai" , point: {lat: 19.0760, lng: 72.8777}},
-  //     {title: "Jharkhand" , point: {lat: 23.6102, lng: 85.2799}}
-  //     ]
-    
-  //   this.setState({locations: places})
+    var allLoc = [
+      {id:'1', title: "Hyderabad" , point: {lat: 17.3850, lng: 78.4867}},
+      {id:'2', title: "Jammu" , point: {lat: 32.7266, lng: 74.8570}},
+      {id:'3', title: "Kolkata" , point: {lat: 22.5726, lng: 88.3639}},
+      {id:'4', title: "Mumbai" , point: {lat: 19.0760, lng: 72.8777}},
+      {id:'5', title: "Jharkhand" , point: {lat: 23.6102, lng: 85.2799}}
+      ];
+    console.log(allLoc);
+    var filteredLoc = allLoc.filter(loc => {return loc.title.includes(val)});
+    console.log(val);
+    this.setState({locations: filteredLoc});
+  }
 
-  //   console.log("in app.js after mount- " + this.state.locations)
-    
-  // }
 
 // defining routes '/' to main page and '/search' to search page
   render() {
@@ -45,6 +45,7 @@ class App extends Component {
           <Route exact path="/" render={() => (
               <MainPageComponent 
                   locations={this.state.locations} 
+                  filterLoc = {this.filterLoc}
                   />
               )}
           />
