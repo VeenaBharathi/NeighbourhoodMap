@@ -53,8 +53,14 @@ class MainPageComponent extends Component {
   createMarkers = (loc) => {
 
     var markers = [];    
-    const locations = loc || this.props.locations;
-    
+    // let animae ='';
+
+
+      
+    // const locations = loc || this.props.locations;
+    const locations = this.props.locations;
+
+   
     // console.log(this);
 
     const map = new google.maps.Map(document.getElementById('map'), {
@@ -73,13 +79,28 @@ class MainPageComponent extends Component {
           // Create a marker per location, and put into markers array.
           var marker = new google.maps.Marker({
             position: position,
-            title: title
-          });
+            title: title,
+            // animation: animae
+          });   
+
           // Push the marker to our array of markers.
           markers.push(marker);
           
           
       } 
+
+      markers.map(m => {
+        if(loc){
+          if(loc.title === m.title){
+              console.log("true")
+            m.setAnimation (google.maps.Animation.BOUNCE);
+          }
+         }
+     else{
+        console.log("false")
+        m.setAnimation ( google.maps.Animation.DROP );
+     }
+      })
       this.showListings(markers, map);
     }
 

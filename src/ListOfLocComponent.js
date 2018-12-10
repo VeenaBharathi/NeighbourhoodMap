@@ -18,7 +18,7 @@ class ListOfLocComponent extends Component {
 			
 				<li style={lists} 
 				onClick={(event) => {
-					showOnlyMarkers([location]) 						
+					showOnlyMarkers(location) 						
 				}}>{location.title}</li>
 			
 	     )
