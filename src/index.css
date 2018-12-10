@@ -12,3 +12,71 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#intercations {
+	display: flex;
+	text-align: center;
+}
+
+ /*764 to 1356*/
+@media only screen and (min-width: 1356px) {
+  .container {
+    width: 1356px;
+    margin: auto;
+  }
+}
+
+@media only screen and (max-width: 764px) {
+input {
+  	width: 100%;
+  	float: 'left';
+  	margin:0;
+  }
+
+  #interactions {
+  		width:90%;
+  		padding: 1px 0px;
+  }
+
+}
+
+@media only screen and (max-width: 557px) {
+input {
+  	width: 100%;
+  	float: 'left';
+  	margin:0;
+  }
+
+  #interactions {
+  		width:90%;
+  		padding: 1px 0px;
+  }
+
+}
+
+
+@media only screen and (min-width: 350px) {
+#head {
+	font-size: 1.3rem;
+}
+
+  #interactions {
+  	 display: inline-block;
+  }
+
+  #input {
+  	width: 30%;
+  }
+
+}
+
+@media only screen and (max-width: 350px) {
+  .container {
+    min-width: 370px;
+  }
+
+  #head {
+	font-size: 1.2rem;
+}
+
+}

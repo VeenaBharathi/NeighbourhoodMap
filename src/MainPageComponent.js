@@ -175,7 +175,8 @@ class MainPageComponent extends Component {
                     />
                   }    
                 </div>
-      	        <div id="map" tabIndex="0" role= "application" aria-label = "map with result locations" style={styles}></div>
+      	        <div id="map" tabIndex="0" 
+                role= "application" aria-label = "map with result locations" style={styles}></div>
             </div>  
           )
   }
