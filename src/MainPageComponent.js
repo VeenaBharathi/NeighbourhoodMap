@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import FilterAreaComponent from './FilterAreaComponent';
 
 class MainPageComponent extends Component {
+
+  state = {
+
+    info : ''
+  }
 
    getGoogleMaps() {
 
@@ -40,7 +44,7 @@ class MainPageComponent extends Component {
   componentDidMount() {
       // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
-
+// console.log(this)
       this.createMarkers();
     });
   }
@@ -51,12 +55,15 @@ class MainPageComponent extends Component {
     var markers = [];    
     const locations = loc || this.props.locations;
     
-    // console.log(locations);
+    // console.log(this);
 
     const map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10
           });
 // console.log(locations.length);
+
+
+
         for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
           var position = locations[i].point;
@@ -71,40 +78,63 @@ class MainPageComponent extends Component {
           // Push the marker to our array of markers.
           markers.push(marker);
           
-          this.showListings(markers, map);
+          
       } 
+      this.showListings(markers, map);
     }
 
   showListings(markers, map) {
         var bounds = new google.maps.LatLngBounds();
+        var currthis = this;
+
+        
+
         // Extend the boundaries of the map for each marker and display the marker
         for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
-          bounds.extend(markers[i].position);
+          let mark = markers[i];
+          mark.setMap(map);
+          bounds.extend(mark.position);
         }
         map.fitBounds(bounds);
 
-          markers.forEach(marker => marker.addListener('click', function(){
-            populateInfoWindow(this, new google.maps.InfoWindow())
-            openModal(this.title)
+
+          markers.forEach(marker =>marker.addListener('click', function(){
+            
+            openModal(marker.title);
+             // console.log("returned");
+             setTimeout(function() {
+              populateInfoWindow(marker, new google.maps.InfoWindow(), currthis.state.info)
+           },500);
+
+             
           }));
 
-  function populateInfoWindow(marker, infwindow) {
+  function populateInfoWindow(marker, infwindow, info) {
+  console.log("populating infwindow for location" + marker.title);
+
+
+
           if(infwindow.marker !== marker) {
             infwindow.marker = marker;
-            infwindow.setContent('<strong>' + marker.title + '</strong>' + '<div><strong>' + marker.position + '</strong></div>' );
+            // console.log("--------" + info);
+            infwindow.setContent('<strong>' + marker.title + '</strong>' 
+              + '<div><strong>' + marker.position + '</strong></div>'
+              +  '<strong>' + info + '</strong>'  );
+            // infwindow.setContent();
             infwindow.open(map, marker);
 
-            infwindow.addListener('closeclick', function(){
+        infwindow.addListener('closeclick', function(event){
+            console.log("adding listsner for " + marker.title);
               infwindow.close(map, marker);
-            })
+
+              })
           }
 
       }
 
   function openModal (title) {
 
-      console.log("In open modal for location: " + title);
+      // console.log("In open modal for location: " + title);
 
     // const link = `https://en.wikipedia.org/w/api.php?action=opensearch&mode=no-cors&format=json&search=${location.title}`;
     // link.mode='no-cors';
@@ -119,9 +149,15 @@ class MainPageComponent extends Component {
           
       let info = res.query.pages[pageid[0]].extract
       // console.log(new DOMParser().parseFromString(info, "text"));
-    let win = window.open();
-    win.document.body.innerHTML = info;
-
+    // let win = window.open();
+    // win.document.body.innerHTML = info;
+    // return "100";
+    // console.log("this here is = " + currthis);
+    currthis.setState({info: info});
+    // console.log("state of info: " + currthis.state.info)
+   
+ // console.log("returning");
+    return '';
 
       })
     }
@@ -151,6 +187,10 @@ class MainPageComponent extends Component {
 
 //   })
 //   }
+
+
+ 
+
 
  render = () => {
 
@@ -203,7 +243,7 @@ class MainPageComponent extends Component {
          </div>
 	        <div id="map" style={styles}></div>
           
-          />
+         
           
         </div>
     
