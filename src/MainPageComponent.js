@@ -41,9 +41,13 @@ class MainPageComponent extends Component {
 
   componentDidMount() {
       // Once the Google Maps API has finished loading, initialize the map
-    this.getGoogleMaps().then((google) => {
-      this.createMarkers();
-    });
+    this.getGoogleMaps()
+            .then((google) => {
+                this.createMarkers();
+                })
+            .catch(function(){
+                console.log("error while fetching maps");
+                })
   }
 
   createMarkers = (loc) => {
@@ -128,15 +132,23 @@ class MainPageComponent extends Component {
         function openModal (title) {
 
               const link = `https://en.wikipedia.org/w/api.php?format=json&exsentences=2&origin=*&action=query&prop=extracts&redirects=1&titles=${title}`;
-              fetch(link).then((response) => {
+              fetch(link)
+              .then((response) => {
                 if(!response.error){
-                    response.json().then(res => {
-                          let pageid = Object.keys(res.query.pages);
-                          let info = res.query.pages[pageid[0]].extract;
-                          currthis.setState({info: info});
-                          return '';
-                    })
+                    response.json()
+                          .then(res => {
+                              let pageid = Object.keys(res.query.pages);
+                              let info = res.query.pages[pageid[0]].extract;
+                              currthis.setState({info: info});
+                              return '';
+                          })
+                          .catch(function(){
+                            console.log("error while fetching json from response");
+                          })
                 }
+              })
+              .catch(function(){
+                console.log("error in fetching log");
               })
         }
   }

@@ -19,7 +19,6 @@ class App extends Component {
       ]
   }
 
-
   filterLoc = (locations, val) => {
 
     var allLoc = [
