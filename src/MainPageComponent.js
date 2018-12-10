@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import FilterAreaComponent from './FilterAreaComponent';
 
 class MainPageComponent extends Component {
-  
-  getGoogleMaps() {
+
+   getGoogleMaps() {
 
   	/* global google */
     // If we haven't already defined the promise, define it
@@ -38,6 +39,8 @@ class MainPageComponent extends Component {
   componentDidMount() {
 
   	var markers = [];
+    const locations = this.props.locations;
+    
     // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
 
@@ -51,16 +54,7 @@ class MainPageComponent extends Component {
             map: map })
 	 	console.log(marker1.map)
 
-     	const locations = 
-	      	[
-	      	{title: "Hyderabad" , point: {lat: 17.3850, lng: 78.4867}},
-	      	{title: "Jammu" , point: {lat: 32.7266, lng: 74.8570}},
-			{title: "Kolkata" , point: {lat: 22.5726, lng: 88.3639}},
-			{title: "Mumbai" , point: {lat: 19.0760, lng: 72.8777}},
-			{title: "Jharkhand" , point: {lat: 23.6102, lng: 85.2799}}
-			]
-
-
+    
 
         for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
@@ -92,7 +86,7 @@ class MainPageComponent extends Component {
     });
   }
 
-  render() {
+  render = () => {
 
   	const styles = {
   		 width: '65%',
@@ -107,22 +101,22 @@ class MainPageComponent extends Component {
   	};
 
     const contains = {
-        display:'flex',
-        text:'center'
+        display:'flex'
     }
 
     return (
+
     	<div className="container" style={contains}>
 	    	 <div id="filter" style={fills}>
-            <h2 style={{color: 'white'}}> Locations </h2>
-            <div className="container" style={contains}>
-            <span><input type='text' placeholder="Search by location"/></span>
-            <span><button>Filter</button></span>
-            </div>
+          {
+            <FilterAreaComponent locations= {this.props.locations}/>
+          }
             
          </div>
 	        <div id="map" style={styles}></div>
+          }
         </div>
+    
       
     )
   }
