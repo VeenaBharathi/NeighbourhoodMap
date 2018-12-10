@@ -95,12 +95,34 @@ class MainPageComponent extends Component {
   render() {
 
   	const styles = {
-  		 width: '100%',
-    	height: window.innerHeight
+  		 width: '65%',
+    	height: window.innerHeight,
+    	float: 'right'
+  	};
+  	const fills = {
+  		width: '35%',
+    	height: window.innerHeight,
+    	background:'#002',
+      padding:'2%'
   	};
 
+    const contains = {
+        display:'flex',
+        text:'center'
+    }
+
     return (
-        <div id="map" style={styles}></div>
+    	<div className="container" style={contains}>
+	    	 <div id="filter" style={fills}>
+            <h2 style={{color: 'white'}}> Locations </h2>
+            <div className="container" style={contains}>
+            <span><input type='text' placeholder="Search by location"/></span>
+            <span><button>Filter</button></span>
+            </div>
+            
+         </div>
+	        <div id="map" style={styles}></div>
+        </div>
       
     )
   }
