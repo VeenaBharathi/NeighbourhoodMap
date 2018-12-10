@@ -45,23 +45,23 @@ class MainPageComponent extends Component {
   }
 
   
-  createMarkers = () => {
+  createMarkers = (loc) => {
 
-    var markers = [];
-
-    const locations = this.props.locations;
+    var markers = [];    
+    const locations = loc || this.props.locations;
+    
     console.log(locations);
 
     const map = new google.maps.Map(document.getElementById('map'), {
           zoom: 10
           });
-
+console.log(locations.length);
         for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
           var position = locations[i].point;
           var title = locations[i].title;
 
-          // console.log(position);
+          console.log(locations.length);
           // Create a marker per location, and put into markers array.
           var marker = new google.maps.Marker({
             position: position,

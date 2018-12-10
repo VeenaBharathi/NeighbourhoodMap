@@ -13,7 +13,7 @@ class ListOfLocComponent extends Component {
 
 	     return(
 			
-				<li style={lists} >{location.title}</li>
+				<li style={lists} onClick={(event) => {showOnlyMarkers([location])}}>{location.title}</li>
 			
 	     )
 	}
