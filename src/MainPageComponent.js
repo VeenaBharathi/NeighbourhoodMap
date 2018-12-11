@@ -4,7 +4,8 @@ import FilterAreaComponent from './FilterAreaComponent';
 class MainPageComponent extends Component {
 
   state = {
-    info : ''
+    info : '',
+    urlToTitle: ''
   }
 
   getGoogleMaps() {
@@ -46,7 +47,7 @@ class MainPageComponent extends Component {
                 this.createMarkers();
                 })
             .catch(function(){
-                console.log("error while fetching maps");
+                alert("error while fetching maps");
                 })
   }
 
@@ -107,20 +108,24 @@ class MainPageComponent extends Component {
         }
         map.fitBounds(bounds);
 
-        markers.forEach(marker =>marker.addListener('click', function(){            
+        markers.forEach(marker =>marker.addListener('click', function(){          
                   openModal(marker.title);
                   setTimeout(function() {
-                    populateInfoWindow(marker, new google.maps.InfoWindow(), currthis.state.info)
+                    populateInfoWindow(marker, new google.maps.InfoWindow(), 
+                      currthis.state.info, marker.title)
                     },500);
         }));
 
-        function populateInfoWindow(marker, infwindow, info) {  
+        function populateInfoWindow(marker, infwindow, info, area) {
+
+              let urlToTitle = `https://en.wikipedia.org/wiki/${area}`;
 
               if(infwindow.marker !== marker) {
                   infwindow.marker = marker;
                   infwindow.setContent('<strong>' + marker.title + '</strong>' 
                     + '<div><strong>' + marker.position + '</strong></div>'
-                    +  '<strong>' + info + '</strong>'  );
+                    + '<strong>' + info + '</strong>' 
+                    + '<a href="' + urlToTitle + '">' + marker.title + ' wikipedia </a>');
                   infwindow.open(map, marker);
 
                   infwindow.addListener('closeclick', function(event){
@@ -132,6 +137,7 @@ class MainPageComponent extends Component {
         function openModal (title) {
 
               const link = `https://en.wikipedia.org/w/api.php?format=json&exsentences=2&origin=*&action=query&prop=extracts&redirects=1&titles=${title}`;
+              
               fetch(link)
               .then((response) => {
                 if(!response.error){
@@ -143,12 +149,12 @@ class MainPageComponent extends Component {
                               return '';
                           })
                           .catch(function(){
-                            console.log("error while fetching json from response");
+                            alert("error while fetching json from response");
                           })
                 }
               })
               .catch(function(){
-                console.log("error in fetching log");
+                alert("error in fetching data from link");
               })
         }
   }
