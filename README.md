@@ -1,41 +1,55 @@
+# Neighbourhood Map Project
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+##Third Party API used
+MediaWiki API by Wikipedia
+(Refer to https://www.mediawiki.org/wiki/API:Query for info regarding API used)
 
-In the project directory, you can run:
+## Instructions
 
-### `npm start`
+Project Title
+* This is a project to search for available locations on map and their information. USers can filter the locations they wish to view on map and click the locations in list to view the highlighted marker on map. When clicked on marker, info regarding the location is fethced from wikipedia using MediaWiki API and displayed n the info window. User is also provided with a link to navigate to the wikipedia page of the location.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Getting Started
+* The code can be downloaded from following git hub location-
+https://github.com/VeenaBharathi/NeighbourhoodMap.git
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Prerequisites
+* Git Bash
+* Browser
+* Sublime Test2
 
-### `npm test`
+Install steps
+* git clone <above repository> into any local folder.
+* Run npm install, npm install react-router-dom, npm install react-route and the application is ready to use.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Instructions
 
-### `npm run build`
+1. The page has filter area and map area.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Filter area by default displays the list of locations that user can find on the map.
+Map area has all the markers corresponding to the available locations on load.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+3.User can type into search input and narrow down the loctaion options. Clicking on filter button will open the result locations' markers on the map.
+  
+4.User may click on the result locations to view the specific location highlighted in the map among other locations with location name in the info window.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5.Clicking on the marker presents user with info regarding the location fetched from Wikipedia using MediaWiki API along with link to navigate to original wikipedia page of the location. 
 
-### `npm run eject`
+Built With
+* Sublime Text Editor
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+##Offline Availability
+Service worker is auto created since the app is created using create-react-app. It will be unregistered by default. The index.js file is modified to register the service worker which works only in production mode. Refer deploy application to production section to learn about production deployment.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+##Deploy Application To Production using Heroku
+1.Once app is ready created using create-react-app, add your own app icon to the Public folder.
+2.Create an Express JS server to serve your production build.
+3.Create a React production build with 'npm run build'
+4.Deploy application
+[For detailed steps, refer - https://medium.com/jeremy-gottfrieds-tech-blog/tutorial-how-to-deploy-a-production-react-app-to-heroku-c4831dfcfa08]
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## Learn More
 
