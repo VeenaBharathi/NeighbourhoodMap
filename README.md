@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-##Third Party API used
+## Third Party API used
 MediaWiki API by Wikipedia
 (Refer to https://www.mediawiki.org/wiki/API:Query for info regarding API used)
 
@@ -26,9 +26,9 @@ Install steps
 
 Instructions
 
-1. The page has filter area and map area.
+1.he page has filter area and map area.
 
-2. Filter area by default displays the list of locations that user can find on the map.
+2.Filter area by default displays the list of locations that user can find on the map.
 Map area has all the markers corresponding to the available locations on load.
 
 3.User can type into search input and narrow down the loctaion options. Clicking on filter button will open the result locations' markers on the map.
@@ -40,10 +40,10 @@ Map area has all the markers corresponding to the available locations on load.
 Built With
 * Sublime Text Editor
 
-##Offline Availability
+## Offline Availability
 Service worker is auto created since the app is created using create-react-app. It will be unregistered by default. The index.js file is modified to register the service worker which works only in production mode. Refer deploy application to production section to learn about production deployment.
 
-##Deploy Application To Production using Heroku
+## Deploy Application To Production using Heroku
 1.Once app is ready created using create-react-app, add your own app icon to the Public folder.
 2.Create an Express JS server to serve your production build.
 3.Create a React production build with 'npm run build'
