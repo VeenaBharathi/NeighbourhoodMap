@@ -25,8 +25,14 @@ class MainPageComponent extends Component {
         // Load the Google Maps API
         const script = document.createElement("script");
         const API = 'AIzaSyB8b0BqRrPOoxj9EiiKP6SoQEhO-l9k3-s';
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${API}&callback=resolveGoogleMapsPromise`;
+        let domain = 'https://maps.googleapis.com/maps/api/js'
+        script.src = `${domain}?key=${API}&callback=resolveGoogleMapsPromise`;
         script.async = true;
+
+        // Since maps API doesnt support fetch/ajax due ro CORS restriction, restricting domain className
+        if(domain !== 'https://maps.googleapis.com/maps/api/js'){
+          alert("Error with domain name details.");
+        }
         document.body.appendChild(script);
       });
     }
@@ -47,11 +53,13 @@ class MainPageComponent extends Component {
                 this.createMarkers();
                 })
             .catch(function(){
-                alert("error while fetching maps");
+                alert("error while creating markers");
                 })
   }
 
   createMarkers = (loc) => {
+
+    var currthis = this;
 
     var markers = [];
     const locations = this.props.locations;
@@ -75,14 +83,27 @@ class MainPageComponent extends Component {
           markers.push(marker);    
       } 
 
+      markers.forEach(marker =>marker.addListener('click', function(){          
+                  openModal(marker.title);
+                  setTimeout(function() {
+                    populateInfoWindow(marker, new google.maps.InfoWindow(), 
+                      currthis.state.info, marker.title)
+                    },500);
+        }));
+
       markers.map(m => {
           if(loc){
               if(loc.title === m.title) {
                 m.setAnimation (google.maps.Animation.BOUNCE);
-                let tempinfo = new google.maps.InfoWindow()
-                tempinfo.marker = m;
-                tempinfo.setContent('<strong>' + m.title + '</strong>');
-                tempinfo.open(map, m);
+                // let tempinfo = new google.maps.InfoWindow()
+                // tempinfo.marker = m;
+                // tempinfo.setContent('<strong>' + m.title + '</strong>' + '<div><strong>' + 'Click the marker to know more.' + '</div></strong>');
+                // tempinfo.open(map, m);
+                openModal(m.title);
+                  setTimeout(function() {
+                    populateInfoWindow(m, new google.maps.InfoWindow(), 
+                      currthis.state.info, m.title)
+                    },500);
               }
            }
 
@@ -93,28 +114,7 @@ class MainPageComponent extends Component {
           return '';
       })
 
-      this.showListings(markers, map);
-  }
-
-  showListings(markers, map) {
-        var bounds = new google.maps.LatLngBounds();
-        var currthis = this;
-
-        // Extend the boundaries of the map for each marker and display the marker
-        for (var i = 0; i < markers.length; i++) {
-          let mark = markers[i];
-          mark.setMap(map);
-          bounds.extend(mark.position);
-        }
-        map.fitBounds(bounds);
-
-        markers.forEach(marker =>marker.addListener('click', function(){          
-                  openModal(marker.title);
-                  setTimeout(function() {
-                    populateInfoWindow(marker, new google.maps.InfoWindow(), 
-                      currthis.state.info, marker.title)
-                    },500);
-        }));
+      showListings(markers, map);
 
         function populateInfoWindow(marker, infwindow, info, area) {
 
@@ -157,7 +157,31 @@ class MainPageComponent extends Component {
                 alert("error in fetching data from link");
               })
         }
+  
+
+  function showListings(markers, map) {
+        var bounds = new google.maps.LatLngBounds();
+        
+
+        // Extend the boundaries of the map for each marker and display the marker
+        for (var i = 0; i < markers.length; i++) {
+          let mark = markers[i];
+          mark.setMap(map);
+          bounds.extend(mark.position);
+        }
+        map.fitBounds(bounds);
+
+        // markers.forEach(marker =>marker.addListener('click', function(){          
+        //           openModal(marker.title);
+        //           setTimeout(function() {
+        //             populateInfoWindow(marker, new google.maps.InfoWindow(), 
+        //               currthis.state.info, marker.title)
+        //             },500);
+        // }));
+
+
   }
+}
 
 
  render = () => {
