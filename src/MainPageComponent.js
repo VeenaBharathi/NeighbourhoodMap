@@ -36,7 +36,6 @@ class MainPageComponent extends Component {
         const API = 'AIzaSyB8b0BqRrPOoxj9EiiKP6SoQEhO-l9k3-s';
         let domain = 'https://maps.googleapis.com/maps/api/js'
         script.src = `${domain}?key=${API}&callback=resolveGoogleMapsPromise`;
-	script.onerror=alert("Error while accessing map");
         script.async = true;
 
         // Since maps API doesnt support fetch/ajax due ro CORS restriction, restricting domain className
