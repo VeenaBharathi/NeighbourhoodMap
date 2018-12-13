@@ -33,7 +33,7 @@ class MainPageComponent extends Component {
         const script = document.createElement("script");
         script.setAttribute("onerror", this.loadError);
         document.body.appendChild(script);
-        const API = 'AIzaSyB8b0BqRrPOoxj9EiiKP6SoQEhO-l9k3-s';
+        const API = '<Your API Key>';
         let domain = 'https://maps.googleapis.com/maps/api/js'
         script.src = `${domain}?key=${API}&callback=resolveGoogleMapsPromise`;
         script.async = true;
