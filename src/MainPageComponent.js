@@ -8,6 +8,13 @@ class MainPageComponent extends Component {
     urlToTitle: ''
   }
 
+  loadError(){
+
+    window.gm_authFailure = () => { 
+        alert("Authorization failure. Please check console log for details");
+     }
+  }  
+
   getGoogleMaps() {
 
   	/* global google */
@@ -18,12 +25,14 @@ class MainPageComponent extends Component {
         window.resolveGoogleMapsPromise = () => {
           // Resolve the promise
           resolve(google);
-          // Tidy up
+          // Tidyp
           delete window.resolveGoogleMapsPromise;
         };
 
         // Load the Google Maps API
         const script = document.createElement("script");
+        script.setAttribute("onerror", this.loadError);
+        document.body.appendChild(script);
         const API = 'AIzaSyB8b0BqRrPOoxj9EiiKP6SoQEhO-l9k3-s';
         let domain = 'https://maps.googleapis.com/maps/api/js'
         script.src = `${domain}?key=${API}&callback=resolveGoogleMapsPromise`;
@@ -33,7 +42,7 @@ class MainPageComponent extends Component {
         if(domain !== 'https://maps.googleapis.com/maps/api/js'){
           alert("Error with domain name details.");
         }
-        document.body.appendChild(script);
+        
       });
     }
 
@@ -43,7 +52,8 @@ class MainPageComponent extends Component {
 
   componentWillMount() {
     // Start Google Maps API loading since we know we'll soon need it
-    this.getGoogleMaps();
+     this.loadError();
+     this.getGoogleMaps();
   }
 
   componentDidMount() {
